@@ -1,0 +1,76 @@
+#+title: Week 1 Lecture Notes
+* About The Class
+** [#A] Introduce Ourselves
+** [#A] Systems Programming is hard
+- Fighting with Valgrind
+- Debugging segfaults is hard
+** [#A] About Rust
+- *Guarantees memory safety* at compile time!!!!
+- Inspired by functional programming (particularly Haskell)
+- Just as fast as C or C++
+* Rust Intro
+** [#A] Cargo
+- Using =g++= directly is a pain
+- Making =Makefile=​s isn't much better
+- =cargo= manages everything for you
+- Demo creating and compiling a project
+  - talk about project, application vs. library, etc.
+  - talk about =src/=, =target/=, =Cargo.toml=
+** [#A] Syntax of Hello, World
+Live tour through file hitting the following points:
+- =fn main= ≈ =int main()=
+- =println!= (it's a macro, but don't worry)
+- add some comments mentioning syntax
+** More syntax
+Edit =main.rs= on the fly while talking about
+*** [#A] variable declarations
+#+begin_src rust
+  let x: i32 = 4;
+#+end_src
+*** [#A] type inference
+#+begin_src rust
+  let x = 4;
+#+end_src
+*** [#A] mutability
+Try compiling
+#+begin_src rust
+  let x = 4;
+  println!("The value of x is {}", x);
+  x = 6;
+  println!("The value of x is {}", x);
+#+end_src
+vs
+#+begin_src rust
+  let mut x = 4;
+  println!("The value of x is {}", x);
+  x = 6;
+  println!("The value of x is {}", x);
+#+end_src
+
+immutable in Rust is much stricter than =const= in C/C++.
+** [#B] Types
+Discuss basic types: integer types, signed vs. unsigned, floats, booleans, chars, =&str=
+** [#A] Functions
+#+begin_src rust
+  fn add(a: i32, b: i32) -> i32 {
+      a + b
+  }
+#+end_src
+- trailing types (no inference)
+- implicit return
+** Control flow
+*** [#B] =for= loops
+*** [#B] =while= loops
+*** [#C] =loop= loops
+*** [#B] =if=
+*** [#A] EXPRESSION BASED!!!
+* Resources
+** [#A] Rust Book
+- we have linked relevant chapters of Rust book
+- lots of great detail
+** [#B] Rust playground
+- great for testing quick ideas out
+** [#A] Rust docs
+- [[https://doc.rust-lang.org/std/index.html]]
+** [#C] Crates.io
+- where people publish "crates"

@@ -1,0 +1,178 @@
+% Created 2023-02-12 Sun 14:58
+% Intended LaTeX compiler: xelatex
+\documentclass[11pt]{article}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage{minted}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage[margin=1in]{geometry}
+\usepackage{mathspec}
+\setmainfont{Charis SIL}
+\setmathsfont(Digits,Latin,Greek){Charis SIL}
+\date{\today}
+\title{}
+\hypersetup{
+ pdfauthor={},
+ pdftitle={},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 28.2.50 (Org mode 9.5.5)}, 
+ pdflang={English}}
+\begin{document}
+
+\section*{Lecture 2}
+\label{sec:orge716ee7}
+\subsection*{Ownership model}
+\label{sec:org524b179}
+\subsubsection*{Double free and use after free}
+\label{sec:org58c33fd}
+
+Real issues in systems programming we will be solving.
+
+C example:
+\begin{minted}[]{c}
+// make a string lowercase
+char *to_lowercase(char *string);
+\end{minted}
+
+\vspace{2cm}
+\begin{center}
+  \begin{tikzpicture}[
+      node/.style={align=center},
+      end/.style={rectangle,draw=black,rounded corners},
+      arrow/.style={text width=2cm},
+    ]
+    \node(A) at (0,0) {\Large What to free?};
+    \node(B) at (-4,-3) {frees input?};
+    \node(C) at (0,-3) {different?};
+    \node[end](D) at (5,-3) {exactly one};
+    \node[end](E) at (-6,-5) {return value};
+    \node[end](F) at (-2,-5) {both};
+    \draw[->] (A) -- node[arrow,left] {malloc new string} (B);
+    \draw[->] (A) -- node[arrow,right,pos=0.6] {malloc only if different} (C);
+    \draw[->] (A) -- node[arrow,right,yshift=5pt] {reuse string} (D);
+    \draw[->] (C) -- node[above] {no} (D);
+    \draw[->] (C) -- node[above] {yes} (B);
+    \draw[->] (B) -- node[left] {yes} (E);
+    \draw[->] (B) -- node[right] {no} (F);
+  \end{tikzpicture}
+\end{center}
+\vspace{2cm}
+
+\subsubsection*{Ownership rules}
+\label{sec:orgc53494c}
+\begin{enumerate}
+\item Every value has an owner
+variable/struct owns its data
+\item That owner is unique
+\item When the owner goes out of scope, the value is dropped
+\end{enumerate}
+\begin{minted}[]{rust}
+{
+    // string owns the string allocated on the heap
+    let string: String = "Hello".to_string()
+} // string freed automatically
+\end{minted}
+
+\subsubsection*{Moving}
+\label{sec:org588c1b0}
+transfer ownership, old value invalid
+
+\begin{minted}[]{rust}
+fn say_string(string: String) { // takes ownership of `string`
+    println!("{}", string);
+} // dropped here
+
+let string: String = "Hello".to_string();
+say_string(string); // ownership transferred from `string`
+say_string(string); // can't use `string` anymore
+\end{minted}
+
+One solution:
+\begin{minted}[]{rust}
+fn say_string(string: String) {
+    println!("{}", string);
+}
+
+let string = "Hello".to_string();
+say_string(string.clone());
+say_string(string);
+\end{minted}
+Ugh, this makes an extra allocation, but sometimes necessary
+
+
+Rust equivalent to C code from before:
+\begin{minted}[]{rust}
+fn to_lowercase(string: String) -> String;
+\end{minted}
+What happens here?
+
+\begin{itemize}
+\item Double free
+\label{sec:orgd3084c8}
+No double free since owner unique
+
+\item Use after free
+\label{sec:org67060b6}
+No use after free, since once ownership is transferred you can't access the value
+
+
+
+\newpage
+\end{itemize}
+\subsubsection*{Borrowing}
+\label{sec:org4beca48}
+\begin{itemize}
+\item References
+\label{sec:org65e70be}
+\(\approx\) pointers
+
+\item Example
+\label{sec:org980b986}
+We don't want \texttt{say\_string} to take ownership of \texttt{string}
+\begin{minted}[]{rust}
+fn say_string(string: &String) {
+    println!("{}", string);
+}
+
+let string = "Hello".to_string();
+say_string(&string);
+say_string(&string);
+\end{minted}
+
+\item Mutable borrowing
+\label{sec:org48fc288}
+\begin{minted}[]{rust}
+struct Counter {
+    count: u32,
+}
+
+impl Counter {
+    fn get_count(&self) -> u32 {
+        self.count
+    }
+
+    fn increment(&mut self) {
+        self.count += 1;
+    }
+}
+\end{minted}
+
+\item Slices + XOR aliasing
+\label{sec:org9d6d242}
+\begin{minted}[]{rust}
+let mut vector: Vec<i32> = vec![1, 2, 3, 4];
+let two: &i32 = &vector[1];
+vector.clear(); // uh oh!
+\end{minted}
+\end{itemize}
+\end{document}

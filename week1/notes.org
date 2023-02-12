@@ -1,0 +1,28 @@
+* Lecture 1
+** Quinn intro stuff
+questions
+** Quinn goals
+** Quinn academic accommodations/integrity/resources
+** Quinn course schedule
+Each week dedicated to learning an aspect of Rust that is an important idea in systems programming
+** Class One
+*GET QUESTIONS THE ENTIRE TIME*!!!!
+*** William sell class on Rust
+*** Quinn Cargo
+Learn to write rust, first
+Before writing rust code, learn about cargo
+audience interaction (who remembers compiled vs. interpreted, who remembers clang++, Makefiles?)
+demo
+docs: =cargo fmt=
+*** William talk, Quinn type tour of Rust
+can't use uninitialized variables
+questions
+**** read error messages with =mut= examples
+I'll give you a second to look at the error message, how do we fix this? (nice and gentle)
+**** how do we make recursive =sum_to_n=?
+** Backup plans
+*** kahoot
+*** Clippy/rustfmt
+*** data types (e.g. can't take number for condition)
+*** structs
+*** module syntax

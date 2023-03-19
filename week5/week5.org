@@ -1,0 +1,10 @@
+* Start with disclaimer (Quinn)
+** Explain lab on Wednesday
+* Stack frames for returning pointer to local (Quinn)
+* Do it in Rust -- woah it breaks (Quinn)
+* Show video clip (Quinn)
+* Go over stack frame diagram for =get_default= (William)
+* Do it in Rust -- woah it breaks and can be fixed (William)
+** Salad analogy
+* Structs with references (William)
+* Slices (William)

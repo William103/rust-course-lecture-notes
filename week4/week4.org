@@ -1,0 +1,25 @@
+* Lecture 4
+* Intro
+* Generics
+** =Either=
+*** =String= =i32=
+*** generic
+*** =impl= a bit different
+* Traits
+** Motivating example
+*** =Book= and =Tweet= both with =summarize= methods
+*** =describe_book= and =describe_tweet= functions just use =summarize= method
+*** this is silly
+** =Summary= trait
+*** =describe= should be able to take something that can be summarized
+*** trait bounds
+**** impl =Clone= for =Either=
+** Blanket impls
+*** =Print= trait
+*** impl =Print= for any =Display=
+*** =3.print()=
+* Motivation for traits
+** =Display= and =Debug=
+*** =#[derive(Debug)]=
+** =Copy=
+** operator overloading

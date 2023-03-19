@@ -1,71 +1,26 @@
 * Lecture 3
-** Shape
-An enum is: a type with multiple variants, where it can be one of the variants
+* Intro
 
-Example: =Shape=
+* Basic syntax
+** basic
+** =match= is an expression like =if-else=
+*** must have a branch for all variants
+*** wildcard patters
+** tuple and struct variants
+*** try to get =width= on =Rectangle=
+*** must pattern match
+** same type (function taking a =Shape= can take either)
+*** can have an =impl= block
+** no heap allocations under the hood
 
-#+begin_src rust
-  enum Shape {
-      Rectangle,
-      Circle,
-  }
-#+end_src
+* Problem 1: Nullability
+** null
+** make our own =Option<T>=
+** =divide=
 
-Can /pattern match/ on enum variants
-#+begin_src rust
-  fn identify_shape(shape: Shape) {
-      match shape {
-          Shape::Circle => println!("Shape!"),
-          Shape::Rectangle => println!("Rectangle!"),
-      }
-  }
-#+end_src
-
-examples in =main=. (creating =Shape=​s, matching on them, etc.)
-
-We can add data
-#+begin_src rust
-  enum Shape {
-      Circle(f64),
-      Rectangle(f64, f64),
-  }
-#+end_src
-
-#+begin_src rust
-  impl Shape {
-      fn area(&self) -> f64 {
-          match self {
-              // std::f64::consts::PI
-              Circle(radius) => 3.14159265 * radius * radius,
-              Rectangle(width, height) => width * height,
-          }
-      }
-  }
-#+end_src
-
-Data can be any type, including structs
-#+begin_src rust
-  enum Shape {
-      Circle {
-          radius: f64,
-      },
-
-      Rectangle {
-          width: f64,
-          height: f64,
-      },
-  }
-#+end_src
-
-#+begin_src rust
-  impl Shape {
-      fn area(&self) -> f64 {
-          match self {
-              Shape::Circle { radius: radius } => 3.14159265 * radius * radius,
-
-              // short for width: width, height: height
-              Shape::Rectangle { width, height } => width * height,
-          }
-      }
-  }
-#+end_src
+* Problem 2: Error Handling
+** tour of how other languages do it
+** =Result<T, E>=
+** =read_to_string=
+** =?=
+** Errors as enums
